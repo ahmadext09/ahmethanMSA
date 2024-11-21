@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Ahmad MSA</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="internet_connection" translatable="false">Please check your internet connection &amp; try again</string>
+    <string name="network_failure" translatable="false">Network Failure</string>
+    <string name="something_went_wrong_try">Opps! Something went wrong. Please try again.</string>
+    <string name="something_went_wrong">Opps! Something went wrong.</string>
+
+    <string name="place_name">Place Name: %s</string>
+    <string name="place_address">Place Address: %s</string>
+    <string name="place_distance">Place Distance: %s meters</string>
+
+    <string name="empty_list">Regret! No match found for the business or place using fourSquare Api where juice and pizza are available together.</string>
+    <string name="juice_button_text">Display Search Results for Juice</string>
+    <string name="pizza_button_text">Display Search Results for Pizza</string>
+    <string name="places_offer_both">Places offering both pizza and juice: %d</string>
+    <string name="no_result_pizza">No search result for pizza</string>
+    <string name="no_result_juice">No search result for juice</string>
+    <string name="location_permission_denied">Location permission denied</string>
+    <string name="location_not_available">Location not available</string>
+    <string name="failed_to_get_location">Failed to get location</string>
+    <string name="no_common_place_found">No common places found!</string>
+
+    <string name="checking_permission">Checking permission…</string>
+    <string name="fetching_location">Fetching location…</string>
+    <string name="fetching_nearby_places">Fetching nearby places…</string>
+    <string name="location_data_empty">Location data is empty</string>
+    <string name="user_location_unavailable">User location is unavailable</string>
+    <string name="no_data_found_for_places">No data found for nearby places</string>
+    <string name="sorry_cant_proceed">Sorry, can\'t proceed without location</string>
+
+    <string name="juice_places">Juice Places</string>
+    <string name="pizza_places">Pizza Places</string>
+    <string name="common_place">Common Places</string>
+
+    <string name="not_available">N/A</string>
+</resources>
