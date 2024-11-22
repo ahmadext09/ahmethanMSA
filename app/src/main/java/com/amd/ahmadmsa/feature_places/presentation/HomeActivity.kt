@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.amd.ahmadmsa.feature_places.presentation.mainscreen.MainScreen
+import com.amd.ahmadmsa.feature_places.presentation.mainscreen.SearchPlacesViewModel
 import com.amd.ahmadmsa.ui.theme.AhmadMSATheme
 import dagger.hilt.android.AndroidEntryPoint
 

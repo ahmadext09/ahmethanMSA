@@ -1,4 +1,4 @@
-package com.amd.ahmadmsa.feature_places.presentation
+package com.amd.ahmadmsa.feature_places.presentation.mainscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
