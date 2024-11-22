@@ -16,13 +16,15 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.amd.ahmadmsa.feature_places.presentation.place_listing_scr.ListScreen
 import com.amd.ahmadmsa.feature_places.presentation.mainscreen.MainScreen
 import com.amd.ahmadmsa.ui.theme.AhmadMSATheme
 import dagger.hilt.android.AndroidEntryPoint
+
+
 
 
 @AndroidEntryPoint
@@ -52,16 +54,17 @@ class HomeActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(navController, startDestination = "main") {
                         composable("main") {
+                            val searchPlacesViewModel: SearchPlacesViewModel = hiltViewModel(it)
                             MainScreen(
-                                locationViewModel = homeViewModel,
+                                locationState = homeViewModel.locationState,
+                                placeSearchState = searchPlacesViewModel.placeSearchState,
                                 modifier = Modifier.padding(innerPadding),
                                 snackBarHostState = snackBarHostState,
-                                navController = navController
+                                snackBarEvent = searchPlacesViewModel.snackBarEvent,
+                                onLocationReceived = { location ->
+                                    searchPlacesViewModel.onActionTriggered(location)
+                                }
                             )
-                        }
-                        composable("list/{type}") { backStackEntry ->
-                            val type = backStackEntry.arguments?.getString("type")
-                            ListScreen(type ?: "", homeViewModel)
                         }
                     }
                 }
@@ -77,7 +80,6 @@ class HomeActivity : ComponentActivity() {
         }
 
     }
-
 
     private fun isPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(

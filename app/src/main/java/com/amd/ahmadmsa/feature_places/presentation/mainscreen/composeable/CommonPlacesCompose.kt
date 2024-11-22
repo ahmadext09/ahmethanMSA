@@ -9,18 +9,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.amd.ahmadmsa.R
 import com.amd.ahmadmsa.feature_places.domain.model.Place
-import com.amd.ahmadmsa.feature_places.presentation.PlaceItemCompose
 import com.amd.ahmadmsa.ui.theme.APP_RED
 
 @Composable
-fun CommonPlacesCompose(commonPlaces: ArrayList<Place>, modifier:Modifier) {
+fun CommonPlacesCompose(commonPlaces: List<Place>, modifier:Modifier) {
 
     Column(
         modifier = modifier

@@ -26,6 +26,7 @@
 
 -keep class com.amd.ahmadmsa.feature_places.data.model** { *; }
 -keep class com.amd.ahmadmsa.feature_places.domain.model** { *; }
+-keep class com.amd.ahmadmsa.feature_places.presentation.model** { *; }
 -keep @androidx.annotation.Keep class * { *; }
 -keepattributes Signature, InnerClasses, EnclosingMethod
 

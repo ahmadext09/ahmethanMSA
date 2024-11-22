@@ -77,8 +77,7 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
-    // Lifecycle Scopes with KTX
-    implementation(libs.lifecycle.viewmodel.ktx)
+
     implementation(libs.play.service.location)
 
     implementation(libs.hilt.android)

@@ -1,4 +1,4 @@
-package com.amd.ahmadmsa.feature_places.presentation
+package com.amd.ahmadmsa.feature_places.presentation.mainscreen.composeable
 
 
 import androidx.compose.foundation.Image

@@ -1,101 +1,105 @@
 package com.amd.ahmadmsa.feature_places.presentation.mainscreen
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import com.amd.ahmadmsa.R
 import com.amd.ahmadmsa.feature_places.presentation.mainscreen.composeable.CommonPlacesCompose
-import com.amd.ahmadmsa.feature_places.presentation.HomeViewModel
 import com.amd.ahmadmsa.feature_places.presentation.mainscreen.composeable.LoaderCompose
-import com.amd.ahmadmsa.feature_places.presentation.PermissionState
 import com.amd.ahmadmsa.feature_places.presentation.mainscreen.composeable.PlaceSelectionCompose
-import com.amd.ahmadmsa.feature_places.presentation.UiState
+import com.amd.ahmadmsa.feature_places.presentation.model.PlaceLists
+import com.amd.ahmadmsa.feature_places.presentation.util.StateResource
+import kotlinx.coroutines.flow.SharedFlow
 
 
 @Composable
 fun MainScreen(
-    locationViewModel: HomeViewModel,
+    locationState: StateResource<Pair<Double, Double>>,
+    placeSearchState: StateResource<PlaceLists>,
     modifier: Modifier = Modifier,
     snackBarHostState: SnackbarHostState,
-    navController: NavController
+    snackBarEvent: SharedFlow<Int>,
+    onLocationReceived: (Pair<Double, Double>) -> Unit
 ) {
-    val permissionState = locationViewModel.permissionState.collectAsState()
-    val uiState = locationViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
 
     LaunchedEffect(Unit) {
-        locationViewModel.snackBarEvent.collect { stringRes ->
+        snackBarEvent.collect { stringRes ->
             snackBarHostState.showSnackbar(context.getString(stringRes))
         }
     }
 
-
-
-    when (permissionState.value) {
-        is PermissionState.Idle -> {
-
-        }
-
-        is PermissionState.Check -> {
-            LoaderCompose(message = stringResource(id = R.string.checking_permission))
-        }
-
-        is PermissionState.Granted -> {
-            when (uiState.value) {
-                is UiState.Idle -> {}
-                is UiState.Loading -> {
-                    val state = uiState.value as UiState.Loading
-                    state.messageRes?.let {
-                        LoaderCompose(message = stringResource(id = state.messageRes))
+    Column(modifier = modifier.fillMaxSize()) {
+        when (locationState) {
+            is StateResource.Loading -> {
+                if (locationState.isLoading) {
+                    locationState.messageString?.let {
+                        LoaderCompose(
+                            message = stringResource(id = it)
+                        )
                     }
                 }
+            }
 
-                is UiState.EmptyCommon -> {
-                    val state = uiState.value as UiState.EmptyCommon
-                    PlaceSelectionCompose(
-                        juicePlaces = state.juicePlaces,
-                        pizzaPlaces = state.pizzaPlaces,
-                        modifier = modifier,
-                        navController = navController,
-                    )
+            is StateResource.Success -> {
+                onLocationReceived(locationState.data)
+
+                when (placeSearchState) {
+                    is StateResource.Loading -> {
+                        if (placeSearchState.isLoading) {
+                            placeSearchState.messageString?.let {
+                                LoaderCompose(
+                                    message = stringResource(id = it)
+                                )
+                            }
+                        }
+                    }
+
+                    is StateResource.Success -> {
+                        val placeLists = placeSearchState.data
+                        if (placeLists.commonPlaces.isEmpty()) {
+                            PlaceSelectionCompose(
+                                modifier = modifier,
+                                juicePlaces = placeLists.juicePlaces,
+                                pizzaPlaces = placeLists.pizzaPlaces
+                            )
+                        } else {
+                            CommonPlacesCompose(
+                                commonPlaces = placeLists.commonPlaces,
+                                modifier = modifier
+                            )
+                        }
+                    }
+
+                    is StateResource.Error -> {
+                        LaunchedEffect(placeSearchState) {
+                            Toast.makeText(
+                                context,
+                                placeSearchState.errorMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
+            }
 
-                is UiState.HasCommon -> {
-                    val state = uiState.value as UiState.HasCommon
-                    CommonPlacesCompose(
-                        commonPlaces = state.commonPlaces,
-                        modifier = modifier
-                    )
-                }
-
-                is UiState.Error -> {
+            is StateResource.Error -> {
+                LaunchedEffect(locationState) {
                     Toast.makeText(
-                        LocalContext.current,
-                        (uiState.value as UiState.Error).errorMessage
-                            ?: stringResource(
-                                id = (uiState.value as UiState.Error).errorString
-                            ),
+                        context,
+                        locationState.errorMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
-        }
 
-        is PermissionState.Denied -> {
-            Toast.makeText(
-                LocalContext.current,
-                stringResource(id = R.string.sorry_cant_proceed),
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 }
-
