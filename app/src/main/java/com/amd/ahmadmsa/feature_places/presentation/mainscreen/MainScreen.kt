@@ -81,7 +81,7 @@ fun MainScreen(
                         LaunchedEffect(placeSearchState) {
                             Toast.makeText(
                                 context,
-                                placeSearchState.errorMessage,
+                                placeSearchState.errorMessage?: context.getString(placeSearchState.errorString),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -93,7 +93,7 @@ fun MainScreen(
                 LaunchedEffect(locationState) {
                     Toast.makeText(
                         context,
-                        locationState.errorMessage,
+                        locationState.errorMessage?: context.getString(locationState.errorString),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
