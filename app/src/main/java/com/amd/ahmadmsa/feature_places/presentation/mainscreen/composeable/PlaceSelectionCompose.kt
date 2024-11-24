@@ -7,17 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,12 +38,10 @@ fun PlaceSelectionCompose(
     pizzaPlaces: List<Place>
 ) {
     var showJuicePlaces by rememberSaveable { mutableStateOf<Boolean?>(null) }
-    val listState = rememberLazyListState()
-
-
-    LaunchedEffect(showJuicePlaces) {
-        listState.scrollToItem(0)
+    val listState = rememberSaveable(saver = LazyListState.Saver) {
+        LazyListState()
     }
+
 
     Column(
         modifier = modifier

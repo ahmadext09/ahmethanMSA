@@ -16,16 +16,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.amd.ahmadmsa.feature_places.presentation.locationScreen.LocationScreen
 import com.amd.ahmadmsa.feature_places.presentation.mainscreen.MainScreen
-import com.amd.ahmadmsa.feature_places.presentation.mainscreen.SearchPlacesViewModel
 import com.amd.ahmadmsa.ui.theme.AhmadMSATheme
 import dagger.hilt.android.AndroidEntryPoint
-
-
 
 
 @AndroidEntryPoint
@@ -53,18 +50,22 @@ class HomeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = { SnackbarHost(snackBarHostState) }
                 ) { innerPadding ->
-                    NavHost(navController, startDestination = "main") {
+                    NavHost(navController, startDestination = "location") {
+                        composable("location") {
+                            LocationScreen(locationState = homeViewModel.locationState,
+                                modifier = Modifier.padding(innerPadding),
+                                onLocationReceived = {
+                                    navController.navigate("main") {
+                                        popUpTo("location") { inclusive = true }
+                                    }
+                                })
+                        }
                         composable("main") {
-                            val searchPlacesViewModel: SearchPlacesViewModel = hiltViewModel(it)
                             MainScreen(
-                                locationState = homeViewModel.locationState,
-                                placeSearchState = searchPlacesViewModel.placeSearchState,
+                                placeSearchState = homeViewModel.placeSearchState,
                                 modifier = Modifier.padding(innerPadding),
                                 snackBarHostState = snackBarHostState,
-                                snackBarEvent = searchPlacesViewModel.snackBarEvent,
-                                onLocationReceived = { location ->
-                                    searchPlacesViewModel.onActionTriggered(location)
-                                }
+                                snackBarEvent = homeViewModel.snackBarEvent,
                             )
                         }
                     }
